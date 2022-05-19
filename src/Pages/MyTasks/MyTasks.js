@@ -9,7 +9,7 @@ const MyTasks = () => {
 
     useEffect(() => {
         const email = user?.email;
-        fetch(`http://localhost:5000/task?email=${email}`)
+        fetch(`https://shrouded-everglades-29679.herokuapp.com/task?email=${email}`)
             .then(res => res.json())
             .then(data => {
                 // console.log(data);
@@ -18,7 +18,7 @@ const MyTasks = () => {
     }, [tasks, user?.email])
 
     const handleDelete = id => {
-        fetch(`http://localhost:5000/task/${id}`, {
+        fetch(`https://shrouded-everglades-29679.herokuapp.com/task/${id}`, {
             method: 'DELETE',
             headers: {
                 'Content-type': 'application/json',
@@ -29,6 +29,7 @@ const MyTasks = () => {
                 const confirmation = window.confirm("Are you sure to delete this task?")
                 if (confirmation) {
                     toast.info('Deleted task!')
+                    console.log(data);
                 }
             })
     }
@@ -36,7 +37,7 @@ const MyTasks = () => {
     const handleComplete = id => {
         const time = new Date();
         console.log(time);
-        fetch(`http://localhost:5000/task/${id}`, {
+        fetch(`https://shrouded-everglades-29679.herokuapp.com/task/${id}`, {
             method: 'PATCH',
             headers: {
                 'Content-type': 'application/json',
