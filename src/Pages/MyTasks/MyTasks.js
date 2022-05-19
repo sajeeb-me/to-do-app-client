@@ -33,6 +33,23 @@ const MyTasks = () => {
             })
     }
 
+    const handleComplete = id => {
+        const time = new Date();
+        console.log(time);
+        fetch(`http://localhost:5000/task/${id}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-type': 'application/json',
+            },
+            body: JSON.stringify({ time })
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.modifiedCount) {
+                    toast.success("YAY! You've completed your task successfully!")
+                }
+            })
+    }
     return (
         <section className='bg-slate-100 p-4 lg:p-8 h-screen'>
             <div>
@@ -51,12 +68,21 @@ const MyTasks = () => {
                         <tbody>
                             {
                                 tasks.map((task, index) => <tr key={task._id} className='hover'>
-                                    <th>{index + 1}</th>
-                                    <td>{task.name}</td>
-                                    <td>{task.date}</td>
-                                    <td>{task.description}</td>
+                                    <th className={task.completed ? 'line-through opacity-60' : ''}>{index + 1}</th>
+                                    <td className={task.completed ? 'line-through opacity-60' : ''}>{task.name}</td>
+                                    <td className={task.completed ? 'line-through opacity-60' : ''}>{task.date}</td>
+                                    <td className={task.completed ? 'line-through opacity-60' : ''}>{task.description}</td>
                                     <td className='flex justify-center gap-4'>
-                                        <button className='btn btn-primary btn-outline'>Complete</button>
+                                        {
+                                            task.completed ?
+                                                <button className='text-base font-semibold'>
+                                                    Completed on
+                                                    <br />
+                                                    {task.completedTime}
+                                                </button>
+                                                :
+                                                <button onClick={() => handleComplete(task._id)} className='btn btn-primary btn-outline'>Complete</button>
+                                        }
                                         <button onClick={() => handleDelete(task._id)} className='btn btn-error btn-outline'>Delete</button>
                                     </td>
                                 </tr>)
